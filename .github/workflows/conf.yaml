@@ -1,0 +1,19 @@
+name: Check code quality
+
+on: [push]
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install flake8 black isort
+      - name: Checking by linter
+        run: flake8 ./
+      - name: Checking by formatter
+        run: isort --check ./ && black --check ./

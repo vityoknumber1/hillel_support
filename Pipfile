@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "~=4.2"
+
+[dev-packages]
+requests = "*"
+black = "~=23.3"
+flake8 = "~=6.0"
+isort = "~=5.12"
+
+[requires]
+python_version = "3.11"
