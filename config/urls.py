@@ -1,11 +1,12 @@
-from datetime import datetime, timedelta
-from dataclasses import dataclass, asdict
 import json
+from dataclasses import asdict, dataclass
+from datetime import datetime, timedelta
 
 import requests
 from django.conf import settings
 from django.contrib import admin
 from django.http import HttpResponse
+from django.http.response import JsonResponse
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
@@ -25,6 +26,7 @@ class Pokemon:
     height: int
     weight: int
     base_experience: int
+
     @classmethod
     def from_raw_data(cls, raw_data: dict) -> "Pokemon":
         filtered_data = filter_by_keys(
@@ -62,7 +64,6 @@ def _get_pokemon(name) -> Pokemon:
             return _get_pokemon(name)
     else:
         pokemon: Pokemon = get_pokemon_from_api(name)
-        #POKEMONS[name] = pokemon
         POKEMONS[name] = [pokemon, datetime.now()]
     return pokemon
 
@@ -77,6 +78,7 @@ def get_pokemon(request, name: str):
         )
     elif request.method == "DELETE":
         _del_pokemon(name)
+        return JsonResponse({"message": "Pokemon was deleted successfully!"})
 
 
 @csrf_exempt
@@ -93,6 +95,7 @@ def get_pokemon_for_mobile(request, name: str):
         )
     elif request.method == "DELETE":
         _del_pokemon(name)
+        return JsonResponse({"message": "Pokemon was deleted successfully!"})
 
 
 def get_pokemons_from_cache(request) -> dict:
@@ -100,15 +103,16 @@ def get_pokemons_from_cache(request) -> dict:
 
     for name, pokemon_inf in POKEMONS.items():
         pokemons_cache[name] = asdict(pokemon_inf[0])
-    
+
     return HttpResponse(
         content_type="application/json",
         content=json.dumps(pokemons_cache),
     )
 
 
-def _del_pokemon(name):
-    del POKEMONS[name]
+def _del_pokemon(name: str):
+    if name in POKEMONS:
+        del POKEMONS[name]
 
 
 def foo(request):
