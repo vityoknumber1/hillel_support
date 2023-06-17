@@ -5,7 +5,8 @@ from django.http import HttpResponse, JsonResponse
 
 from core.errors import SerializerError
 from core.models import User
-from core.serializers import (
+
+from core.serializers import (  # isort:skip
     UserCreateRequestSerializer,
     UserCreateResponseSerializer,
 )
