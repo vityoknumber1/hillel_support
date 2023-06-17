@@ -5,7 +5,7 @@ from string import ascii_letters
 from django.http import HttpResponse
 from django.urls import path
 
-from .models import Message, Request, User
+from ..core.models import Message, Request, User
 
 # *****************************************************
 # All roles are hardcoded instead of beeing used in the database
