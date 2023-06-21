@@ -26,9 +26,9 @@ class LoginRequestSerializer(serializers.Serializer):
 
 class LoginResponseSerializer(serializers.ModelSerializer):
     def post(self, request):
-        try_login = LoginRequestSerializer(data=request.data)
-        is_valid = try_login.is_valid()
-        if not is_valid:
-            raise SerializerError(try_login)
+        login_request_serializer = LoginRequestSerializer(data=request.data)
+
+        if not login_request_serializer.is_valid():
+            raise SerializerError(login_request_serializer)
 
         return "Login successful"
