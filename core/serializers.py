@@ -1,34 +1,27 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 
-from core.errors import SerializerError
+from core.constants import Role
 
 User = get_user_model()
 
 
-class UserCreateRequestSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    password = serializers.CharField()
-    first_name = serializers.CharField()
-    last_name = serializers.CharField()
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["email", "password"]
+
+    def validate(self, attrs):
+        attrs["password"] = make_password(attrs["password"])
+        attrs["role"] = Role.USER
+        return attrs
+
+    def to_representation(self, instance):
+        return {"id": instance.id, "email": instance.email}
 
 
-class UserCreateResponseSerializer(serializers.ModelSerializer):
+class UserPublicSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "email", "first_name", "last_name"]
-
-
-class LoginRequestSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    password = serializers.CharField()
-
-
-class LoginResponseSerializer(serializers.ModelSerializer):
-    def post(self, request):
-        login_request_serializer = LoginRequestSerializer(data=request.data)
-
-        if not login_request_serializer.is_valid():
-            raise SerializerError(login_request_serializer)
-
-        return "Login successful"
