@@ -8,11 +8,26 @@ class TicketSerializer(serializers.ModelField):
 
     class Meta:
         model = Ticket
-        fields = ["id", "title", "text", "visibility", "status", "user"]
-        read_only_fields = ["visibility"]
+        fields = [
+            "id",
+            "title",
+            "text",
+            "visibility",
+            "status",
+            "user",
+            "manager",
+        ]
+        read_only_fields = ["visibility", "manager"]
 
-    def validate(self, attrs: dict):
-        return attrs
 
-    def save(self, *args, **kwargs):
-        return super().save(*args, **kwargs)
+class TicketAssignSerializer(serializers.Serializer):
+    manager_id = serializers.IntegerField()
+
+    def validate_manager_id(self, manager_id):
+        return manager_id
+
+    def assign(self, ticket: Ticket) -> Ticket:
+        ticket.manager_id = self.validated_data["manager_id"]
+        ticket.save()
+
+        return ticket
