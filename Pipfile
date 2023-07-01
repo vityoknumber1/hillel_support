@@ -15,6 +15,7 @@ flake8 = "~=6.0"
 isort = "~=5.12"
 django-stubs = "*"
 djangorestframework-stubs = "*"
+drf-yasg = "*"
 
 [requires]
 python_version = "3.11"
