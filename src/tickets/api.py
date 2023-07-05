@@ -1,3 +1,5 @@
+from time import sleep
+
 from django.db.models import Q
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
@@ -5,11 +7,19 @@ from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from config.celery import celery_app
 from tickets.models import Message, Ticket
 from tickets.permissions import IsOwner, RoleIsAdmin, RoleIsManager, RoleIsUser
 from tickets.serializers import TicketAssignSerializer, TicketSerializer
 from users.constants import Role
 from users.models import User
+
+
+@celery_app.task
+def send_email():
+    print("📭 Sending email")
+    sleep(10)
+    print("✅ Email sent")
 
 
 class TicketAPIViewSet(ModelViewSet):
@@ -18,6 +28,8 @@ class TicketAPIViewSet(ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         all_tickets = Ticket.objects.all()
+
+        send_email.delay()
 
         match user.role:
             case Role.ADMIN:

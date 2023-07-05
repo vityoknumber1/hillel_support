@@ -8,8 +8,7 @@ urlpatterns = [
     path(
         "token/",
         swagger_auto_schema(
-            method="post\
-                            ",
+            method="post",
             responses={201: LoginResponseSerializer},
         )(TokenObtainPairView.as_view()),
     ),
