@@ -142,9 +142,8 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.\
-                                   permissions.IsAuthenticated",
-    ),
+        "rest_framework.permissions.IsAuthenticated",
+    ),  # noqa
 }
 
 
@@ -153,3 +152,6 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
+
+CELERY_BROKER_URL = "redis://localhost:6379/0"
