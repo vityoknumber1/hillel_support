@@ -10,9 +10,7 @@ ROOT_DIR = SRC_DIR.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = (
-    "django-insecure-y_8&46)at0peph0tnj@u6_zqv01+isi(l)9_xd-fz)&*@cef*9"  # noqa
-)
+SECRET_KEY = "django-insecure-y_8&46)at0peph0tnj@u6_zqv01+isi(l)9_xd-fz)&*@cef*9"  # noqa
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
